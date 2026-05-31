@@ -71,7 +71,6 @@
   #};
 
   programs.steam.enable = true;
-  services.flatpak.enable = true;
   services.ollama = {
     enable = true;
     package = pkgs.ollama-cuda;
