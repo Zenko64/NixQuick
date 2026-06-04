@@ -1,9 +1,5 @@
 # Desktop Main Module
 # Contains Options and Essential Services
-{ ... }:
-let
-  themeNames = [ "catppuccin-mocha" ];
-in
 {
   flake.modules.nixos.desktop =
     {
@@ -16,11 +12,6 @@ in
       options.${namespace} = {
         desktop = {
           enable = lib.mkEnableOption "desktop environment support";
-          theme = lib.mkOption {
-            type = lib.types.nullOr (lib.types.enum themeNames);
-            default = null;
-            description = "Theme applied to the desktop environment.";
-          };
         };
         greeter = lib.mkOption {
           type = lib.types.enum [
@@ -30,6 +21,7 @@ in
           default = null;
           description = "Login greeter to enable.";
         };
+
       };
 
       config = lib.mkIf config.${namespace}.desktop.enable {
@@ -50,22 +42,6 @@ in
             };
           };
         };
-      };
-    };
-
-  # Home-Manager Overrides
-  flake.modules.homeManager.desktop =
-    {
-      namespace,
-      lib,
-      osConfig,
-      ...
-    }:
-    {
-      options.${namespace}.desktop.theme = lib.mkOption {
-        type = lib.types.nullOr (lib.types.enum themeNames);
-        default = osConfig.${namespace}.desktop.theme;
-        description = "Theme applied to the desktop environment.";
       };
     };
 }

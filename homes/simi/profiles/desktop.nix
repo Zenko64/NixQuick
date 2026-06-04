@@ -4,6 +4,8 @@
   ...
 }:
 {
+  local.desktop.theme = "tokyo-night-light";
+
   stylix = {
     image = ../wallpapers/Koi.png;
   };

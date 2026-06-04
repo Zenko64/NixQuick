@@ -58,10 +58,12 @@
           path = ./hosts;
           autoConstruct = true;
           shared = {
+            # Loads modules that can either bring behavior, or options that cause behavior.
             modules = [
-              # Loads modules that can either bring behavior, or options that cause behavior.
-              # Core Modules
+              # Libs
               inputs.disko.nixosModules.disko
+              inputs.stylix.nixosModules.stylix
+              # Core Modules
               config.flake.modules.nixos.core
               config.flake.modules.nixos.desktop
 
