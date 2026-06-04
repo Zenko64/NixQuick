@@ -10,7 +10,7 @@
         useGlobalPkgs = true;
         useUserPackages = true;
         extraSpecialArgs = { inherit inputs namespace; };
-        
+
         # Import Shared Home-Manager Modules
         sharedModules = [
           (

@@ -192,7 +192,7 @@
           # Keybinds
           bind = [
             # TODO: Add Media Keys
-            
+
             # Lock Screen
             "$mainMod $altMod, L, exec, hyprlock"
 

@@ -5,9 +5,9 @@
 }:
 {
   stylix = {
-   image = ../wallpapers/Koi.png;
+    image = ../wallpapers/Koi.png;
   };
-  
+
   home.packages = with pkgs; [
     hyprpaper
     # Desktop Apps

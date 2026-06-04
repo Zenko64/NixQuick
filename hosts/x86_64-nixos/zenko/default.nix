@@ -13,7 +13,7 @@
     desktop = {
       enable = true;
       theme = "catppuccin-mocha";
-      environments.hyprland.enable = false;
+      compositors.hyprland.enable = true;
     };
     greeter = "greetd";
   };

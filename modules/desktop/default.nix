@@ -1,8 +1,9 @@
 # Desktop Main Module
 # Contains Options and Essential Services
-{...}: let
-  themeNames = ["catppuccin-mocha"];
- in
+{ ... }:
+let
+  themeNames = [ "catppuccin-mocha" ];
+in
 {
   flake.modules.nixos.desktop =
     {
@@ -52,8 +53,15 @@
       };
     };
 
-    # Home-Manager Overrides
-    flake.modules.homeManager.desktop = {namespace, lib, osConfig, ...}: {
+  # Home-Manager Overrides
+  flake.modules.homeManager.desktop =
+    {
+      namespace,
+      lib,
+      osConfig,
+      ...
+    }:
+    {
       options.${namespace}.desktop.theme = lib.mkOption {
         type = lib.types.nullOr (lib.types.enum themeNames);
         default = osConfig.${namespace}.desktop.theme;
