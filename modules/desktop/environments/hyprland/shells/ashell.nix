@@ -7,10 +7,10 @@
       ...
     }:
     {
-      config = lib.mkIf config.${namespace}.desktop.environments.hyprland.enable {
-        home.packages = lib.mkIf (config.${namespace}.desktop.environments.hyprland.shell == "ashell") {
+      config = lib.mkIf config.${namespace}.desktop.environments.hyprland.enable (
+        lib.mkIf (config.${namespace}.desktop.environments.hyprland.shell == "ashell") {
           programs.ashell.enable = true;
-        };
-      };
+        }
+      );
     };
 }
