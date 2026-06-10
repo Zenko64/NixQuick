@@ -5,6 +5,8 @@
   imports = [
     ./disko.nix
     ./users.nix
+    ./services.nix
+    ./programs.nix
   ];
 
   console.keyMap = "pt-latin1";

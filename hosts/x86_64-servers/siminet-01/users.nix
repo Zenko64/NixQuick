@@ -10,18 +10,8 @@ in
     home = "/home/simi";
     shell = pkgs.fish;
     hashedPassword = "$y$j9T$tjs435fHbjQ.5SGhfWQP2.$eY6O.M606bYPymg/JU3rFNEWWLkIBba4JYAaU0gEmG4";
-    extraGroups = [
-      "audio"
-      "gamemode"
-      "input"
-      "kvm"
-      "networkmanager"
-      "render"
-      "scanner"
-      "video"
-      "wheel"
-    ];
+    extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [ sshPubKey ];
   };
-  home-manager.users.simi.imports = [ "${inputs.self}/homes/simi/profiles/desktop.nix" ];
+  home-manager.users.simi.imports = [ "${inputs.self}/homes/simi/profiles/server.nix" ];
 }

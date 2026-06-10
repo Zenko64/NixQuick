@@ -4,6 +4,10 @@
   inputs = {
     # System
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
+    nixos-hardware = {
+      url = "github:NixOS/nixos-hardware";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     disko.url = "github:nix-community/disko";
 
     # Frameworks
@@ -20,7 +24,6 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    catppuccin.url = "github:catppuccin/nix";
   };
 
   outputs =
@@ -39,7 +42,7 @@
         # Namespace that holds every injected module options
         namespace = "local";
 
-        # Supported architectures
+        # Supported core architectures
         systems = [ "x86_64-linux" ];
 
         # Flake Modules To Import (Flake-Parts only)
@@ -48,6 +51,7 @@
           inputs.easy-hosts.flakeModule
           inputs.flake-parts.flakeModules.modules
           inputs.home-manager.flakeModules.home-manager
+
           (import-tree ./lib)
 
           # Inject all the modules in the dirtree into flake-parts
@@ -57,18 +61,34 @@
         easy-hosts = {
           path = ./hosts;
           autoConstruct = true;
+          additionalClasses = {
+            desktops = "nixos";
+            servers = "nixos";
+          };
+          perClass =
+            class:
+            let
+              classMap = {
+                desktops = [
+                  config.flake.modules.nixos.desktop
+                  inputs.stylix.nixosModules.stylix
+                ];
+                servers = [
+                  config.flake.modules.nixos.server
+                ];
+              };
+            in
+            {
+              modules = classMap.${class} or [ ];
+            };
           shared = {
             # Loads modules that can either bring behavior, or options that cause behavior.
             modules = [
               # Libs
               inputs.disko.nixosModules.disko
-              inputs.stylix.nixosModules.stylix
+
               # Core Modules
               config.flake.modules.nixos.core
-              config.flake.modules.nixos.desktop
-
-              # Theming
-              inputs.catppuccin.nixosModules.catppuccin
             ];
             specialArgs = {
               inherit inputs;

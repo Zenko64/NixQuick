@@ -1,7 +1,8 @@
 # Main Host Configuration
-{ ... }:
+{ inputs, ... }:
 {
   imports = [
+    inputs.nixos-hardware.nixosModules.asus-zephyrus-gu605cw
     ./hardware-configuration.nix
     ./gpu.nix
     ./networks.nix
@@ -11,14 +12,14 @@
 
   local = {
     desktop = {
-      enable = true;
       theme = "catppuccin-mocha";
       environments.hyprland = {
         enable = true;
         shell = "ashell";
       };
+      environments.niri.enable = true;
+      greeter = "tuigreet";
     };
-    greeter = "greetd";
   };
 
   home-manager.sharedModules = [

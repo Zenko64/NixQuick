@@ -10,7 +10,6 @@
   };
 
   home.packages = with pkgs; [
-    hyprpaper
     # Desktop Apps
     bitwarden-desktop
     gnome-software
@@ -25,6 +24,7 @@
 
     # Terminal toys
     clock-rs
+    hyprpaper
     cmatrix
     pipes-rs
   ];
