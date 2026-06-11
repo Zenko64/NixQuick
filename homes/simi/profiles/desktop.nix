@@ -11,7 +11,6 @@
 
   home.packages = with pkgs; [
     # Desktop Apps
-    bitwarden-desktop
     gnome-software
     (discord.override {
       withOpenASAR = true;
@@ -24,26 +23,12 @@
 
     # Terminal toys
     clock-rs
-    hyprpaper
     cmatrix
     pipes-rs
 
     # Tools
     gotop
   ];
-
-  xdg.desktopEntries.steam = {
-    name = "Steam";
-    exec = "uwsm app -- steam %U";
-    icon = "steam";
-    terminal = false;
-    type = "Application";
-    categories = [ "Network" "FileTransfer" "Game" ];
-    mimeType = [
-      "x-scheme-handler/steam"
-      "x-scheme-handler/steamlink"
-    ];
-  };
 
   programs = {
     fish.enable = true;

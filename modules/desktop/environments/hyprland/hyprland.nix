@@ -30,8 +30,6 @@ in
       };
 
       config = lib.mkIf config.${namespace}.desktop.environments.hyprland.enable {
-        xdg.portal.enable = true;
-
         programs.hyprland = {
           enable = true;
           withUWSM = true;
@@ -42,7 +40,7 @@ in
             postInstall = (prev.postInstall or "") + ''
               rm $out/share/wayland-sessions/hyprland.desktop
               sed -i 's/Name=Hyprland (uwsm-managed)/Name=Hyprland/' $out/share/wayland-sessions/hyprland-uwsm.desktop
-              sed -i 's/start -e -D Hyprland hyprland.desktop/start -e -D Hyprland -- start-hyprland/' $out/share/wayland-sessions/hyprland-uwsm.desktop
+              sed -i "s|start -e -D Hyprland hyprland.desktop|start -e -D Hyprland -- $out/bin/hyprland|" $out/share/wayland-sessions/hyprland-uwsm.desktop
             '';
             passthru.providedSessions = [ "hyprland-uwsm" ];
           });
@@ -83,6 +81,7 @@ in
 
         services = {
           hypridle = {
+            enable = true;
             # WARN: Turning the display off before locking the screen can result in you getting stuck in a blackscreen.
             settings = {
               general = {
