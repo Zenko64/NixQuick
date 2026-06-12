@@ -6,6 +6,7 @@
     ./gpu.nix
     ./networks.nix
     ./programs.nix
+    ./users.nix
   ];
 
   boot = {
