@@ -9,6 +9,17 @@
     ./users.nix
   ];
 
+  local = {
+    desktop = {
+      theme = "catppuccin-mocha";
+      compositors.hyprland = {
+        enable = true;
+        shell = "ashell";
+      };
+      greeter = "tuigreet";
+    };
+  };
+
   boot = {
     #kernelParams = [
     #  "quiet"
@@ -19,17 +30,6 @@
 
     # After using EDK2 Shell, Please Disable It, For Security.
     # loader.systemd-boot.edk2-uefi-shell.enable = true;
-
-    local = {
-      desktop = {
-        theme = "catppuccin-mocha";
-        compositors.hyprland = {
-          enable = true;
-          shell = "ashell";
-        };
-        greeter = "tuigreet";
-      };
-    };
 
     # Boot Instantly. To see the bootmenu, hold space during boot.
     loader.timeout = 0;
