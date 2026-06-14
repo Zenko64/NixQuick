@@ -11,7 +11,7 @@
 
   services.linux-wallpaperengine = {
     enable = true;
-    assetsPath = /mnt/files/Games/Steam/steamapps/common/wallpaper_engine/assets
+    assetsPath = /mnt/files/Games/Steam/steamapps/common/wallpaper_engine/assets;
   };
 
   home.packages = with pkgs; [
