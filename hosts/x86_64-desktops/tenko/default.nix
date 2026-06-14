@@ -37,7 +37,7 @@
     # Obtain the EFIDeviceHandle from the EDK2 Shell
     loader.systemd-boot.windows."00-windows" = {
       title = "Windows";
-      efiDeviceHandle = "FS0";
+      efiDeviceHandle = "FS1";
       sortKey = "00";
     };
   };
