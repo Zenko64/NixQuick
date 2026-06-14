@@ -1,9 +1,11 @@
 # Main Host Configuration
 # Homelab EntryPoint
-{ inputs, ... }:
+# NixOS-Hardware sets custom kernel for Pi and makes everything a pain. 
+# Don't enable it, or else you'll have to build it from source
+# and mess with the priority in the kernel module manually.
+{ ... }:
 {
   imports = [
-    inputs.nixos-hardware.nixosModules.raspberry-pi-4
     ./users.nix
     ./services.nix
     ./programs.nix
