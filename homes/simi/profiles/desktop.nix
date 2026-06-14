@@ -6,7 +6,12 @@
 {
   local.desktop = {
     theme = "catppuccin-macchiato";
-    wallpaper = ../wallpapers/Koi.png;
+    wallpaper = null;
+  };
+
+  services.linux-wallpaperengine = {
+    enable = true;
+    assetsPath = /mnt/files/Games/Steam/steamapps/common/wallpaper_engine/assets
   };
 
   home.packages = with pkgs; [
@@ -16,6 +21,7 @@
       withOpenASAR = true;
       withVencord = true;
     })
+    waypaper
 
     # Development Tools
     claude-code

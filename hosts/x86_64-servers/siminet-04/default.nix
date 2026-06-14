@@ -9,7 +9,7 @@
     ./programs.nix
   ];
 
-    networking = {
+  networking = {
     useDHCP = false;
     interfaces.enp0s20f0u1 = {
       ipv4.addresses = [
@@ -28,7 +28,6 @@
       "8.8.8.8"
     ];
   };
-
 
   console.keyMap = "pt-latin1";
   i18n.defaultLocale = "en_US.UTF-8";

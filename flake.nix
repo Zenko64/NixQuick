@@ -57,7 +57,10 @@
         namespace = "local";
 
         # Supported core architectures
-        systems = [ "x86_64-linux" ];
+        systems = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
 
         # Flake Modules To Import (Flake-Parts only)
         imports = [
@@ -78,6 +81,10 @@
           additionalClasses = {
             desktops = "nixos";
             servers = "nixos";
+          };
+          perArch = arch: {
+            modules =
+              if config.flake.modules.nixos ? ${arch} then [ config.flake.modules.nixos.${arch} ] else [ ];
           };
           perClass =
             class:
