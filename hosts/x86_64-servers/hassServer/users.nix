@@ -1,5 +1,8 @@
 # Users and Home Configurations
-{ pkgs, inputs, ... }:
+{ inputs, ... }:
+let
+  sshPubKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILQyfvGLHb+gMY1dzUZp1ckpktrdF204scLSJc/wxVq0 simi@zenko";
+in
 {
   users.users.nacho = {
     isNormalUser = true;
@@ -7,11 +10,11 @@
     createHome = true;
     initialPassword = "nacho";
     extraGroups = [ "wheel" ];
-    shell = pkgs.fish;
+    openssh.authorizedKeys.keys = [ sshPubKey ];
   };
 
   # Don't use Relative Paths as it is impure. Always append the path to inputs.self, as inputs.self leads to the root.
-  home-manager.users.simi.imports = [
+  home-manager.users.nacho.imports = [
     (inputs.self + "/homes/nacho/profiles/server.nix")
   ];
 }

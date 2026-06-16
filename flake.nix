@@ -125,11 +125,9 @@
           let
             netboot = inputs.self.nixosConfigurations.netboot.config.system.build;
             iso = inputs.self.nixosConfigurations.iso.config.system.build.isoImage;
-            sdImage = inputs.self.nixosConfigurations.sdImage.config.system.build.sdImage;
           in
           {
             packages = {
-              sdImage = sdImage;
               iso = iso;
               default = iso;
             };

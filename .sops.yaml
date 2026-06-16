@@ -1,12 +1,12 @@
 keys:
   # Administrator Key "ssh-to-age -i ~/.ssh/id_ed25519.pub" (Decryption done with Portable SSH PrivateKey)
-  - &admin age1c9plrjxglcrepqjujaz7kz46s05tlh33ztr6x5fe83gwuq0jzsxqdr527n
+  - &admin age1c9plrjxglcrepqjujaz7kz46s05tlh33ztr6x5fe83gwuq0jzsxqdr527n # TODO: Replace with your own key.
 
   # Connect to target host and run "ssh-keyscan targethost.local | ssh-to-age"
   # WARNING: These change per-install. If the OS is reinstalled, these must be reset.
-  # - &hassServer age1...  # TODO: fill in when online
+  - &hassServer age14ex4w7r0tqjkuj7a6vm0mqcgqs22qd6rehydekjtvd5g3sjx4u4qge30w0
 
 creation_rules:
   - path_regex: hosts/x86_64-servers/hassServer/secrets/.*\.yaml$
     key_groups:
-      - age: [*admin]
+      - age: [*admin, *hassServer]
