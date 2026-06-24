@@ -1,5 +1,5 @@
 {
-  description = "My Custom NixOS Configuration.";
+  description = "Simi's Personal NixQuick Configuration";
 
   inputs = {
     # System
@@ -16,9 +16,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Utilities
+    nix-topology.url = "github:oddlama/nix-topology";
+
     # Frameworks
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:denful/import-tree";
+    pkgs-by-name.url = "github:drupol/pkgs-by-name-for-flake-parts";
     easy-hosts.url = "github:tgirlcloud/easy-hosts";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -31,6 +35,11 @@
 
     # Desktops
     hyprland.url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
+
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # Theming
     stylix = {
@@ -47,7 +56,7 @@
       ...
     }:
     flake-parts.lib.mkFlake { inherit inputs; } (
-      { config, ... }:
+      { config, withSystem, ... }:
       {
         # ! Do NOT Disable This!
         # Disabling This Will Break Auto-completion, and therefore making it unnecessarily more difficult to use this.
@@ -67,7 +76,9 @@
           inputs.disko.flakeModule
           inputs.easy-hosts.flakeModule
           inputs.flake-parts.flakeModules.modules
+          inputs.pkgs-by-name.flakeModule
           inputs.home-manager.flakeModules.home-manager
+          inputs.nix-topology.flakeModule
 
           (import-tree ./lib)
 
@@ -109,6 +120,7 @@
               inputs.disko.nixosModules.disko
               inputs.sops-nix.nixosModules.sops
               inputs.lanzaboote.nixosModules.lanzaboote
+              inputs.nix-topology.nixosModules.default
 
               # Core Modules
               config.flake.modules.nixos.core
@@ -120,8 +132,23 @@
           };
         };
 
+        flake.overlays.default =
+          let
+            namespace = config.namespace;
+          in
+          _: prev:
+          withSystem prev.stdenv.hostPlatform.system (
+            { config, ... }:
+            {
+              ${namespace} = config.packages;
+            }
+          );
+
         perSystem =
-          { pkgs, ... }:
+          {
+            pkgs,
+            ...
+          }:
           let
             netboot = inputs.self.nixosConfigurations.netboot.config.system.build;
             iso = inputs.self.nixosConfigurations.iso.config.system.build.isoImage;
@@ -133,6 +160,8 @@
               iso = iso;
               default = iso;
             };
+
+            pkgsDirectory = ./packages; # Other packages, not host built results
             devShells.default = pkgs.mkShell {
               buildInputs = [
                 pkgs.nixd
@@ -158,13 +187,11 @@
               ];
 
               shellHook = ''
-                sops git-hook install
-
                 # Intro Message
-                echo "-----Zenko64's NixOS Development Shell-----"
+                echo "----- NixQuick Development Shell -----"
                 echo "Commands:"
                 echo " - netboot: Start Installer PXEServer with OpenSSH Enabled."
-                echo "-------------------------------------------"
+                echo "--------------------------------------"
               '';
             };
           };

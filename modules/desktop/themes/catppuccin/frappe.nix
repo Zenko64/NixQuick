@@ -10,9 +10,6 @@ let
 
       base16Scheme = "${pkgs.base16-schemes}/share/themes/${themeName}.yaml";
 
-      opacity.desktop = 0.8;
-      opacity.popups = 0.8;
-
       cursor = {
         package = pkgs.nordzy-cursor-theme;
         name = "Nordzy-catppuccin-frappe-sky";
@@ -49,6 +46,22 @@ in
       ...
     }:
     {
-      config = lib.mkIf (config.${namespace}.desktop.theme == themeName) (theme pkgs lib);
+      config = lib.mkIf (config.${namespace}.desktop.theme == themeName) (theme pkgs lib) // {
+        programs.cava = {
+          settings.color = {
+            background = "#303446";
+
+            gradient = 1;
+            gradient_color_1 = "#81c8be";
+            gradient_color_2 = "#99d1db";
+            gradient_color_3 = "#85c1dc";
+            gradient_color_4 = "#8caaee";
+            gradient_color_5 = "#ca9ee6";
+            gradient_color_6 = "#f4b8e4";
+            gradient_color_7 = "#ea999c";
+            gradient_color_8 = "#e78284";
+          };
+        };
+      };
     };
 }

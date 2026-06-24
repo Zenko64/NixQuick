@@ -1,8 +1,8 @@
 {
   flake.modules.nixos.desktop =
     {
-      inputs,
       pkgs,
+      inputs,
       ...
     }:
     {
@@ -34,8 +34,16 @@
     };
 
   flake.modules.homeManager.desktop =
-    { config, ... }:
     {
+      pkgs,
+      config,
+      ...
+    }:
+    {
+      home.packages = with pkgs; [
+        pwvucontrol
+      ];
+
       xdg = {
         configFile."uwsm/env".source =
           "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh";

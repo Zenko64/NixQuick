@@ -1,25 +1,18 @@
 {
   flake.modules.nixos.desktop =
-    let
-      greeters = [
-        "tuigreet"
-        "regreet"
-
-        "sddm"
-        "lightdm"
-        "ly"
-      ];
-    in
     {
+      config,
       lib,
       namespace,
       ...
     }:
     {
-      options.${namespace}.desktop.greeter = lib.mkOption {
-        type = lib.types.nullOr (lib.types.enum greeters);
-        default = null;
-        description = "Login greeter to enable.";
-      };
+      # Assert that there is only a single greeter enable at a time.
+      config.assertions = [
+        {
+          assertion = lib.count (c: c.enable) (lib.attrValues config.${namespace}.desktop.greeters) <= 1;
+          message = "${namespace}.desktop.greeters: Only a single greeter can be enabled at a time!";
+        }
+      ];
     };
 }

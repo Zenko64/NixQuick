@@ -64,8 +64,19 @@ in
       };
 
       # If statement stops null value from overriding theme images
-      config.stylix.image = lib.mkIf (
-        config.${namespace}.desktop.wallpaper != null
-      ) config.${namespace}.desktop.wallpaper;
+      config = {
+        stylix = {
+          opacity = {
+            applications = 0.85;
+            desktop = 0.875;
+            popups = 0.9;
+            terminal = 0.85;
+          };
+
+          image = lib.mkIf (
+            config.${namespace}.desktop.wallpaper != null
+          ) config.${namespace}.desktop.wallpaper;
+        };
+      };
     };
 }

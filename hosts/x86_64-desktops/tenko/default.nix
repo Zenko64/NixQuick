@@ -16,7 +16,7 @@
         enable = true;
         shell = "ashell";
       };
-      greeter = "tuigreet";
+      greeters.tuigreet.enable = true;
     };
   };
 

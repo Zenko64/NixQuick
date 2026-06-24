@@ -20,15 +20,28 @@
         enable = true;
         shell = "ashell";
       };
-      greeter = "tuigreet";
+      greeters.tuigreet.enable = true;
     };
+    boot.secureBoot = true;
+    boot.splash = true;
   };
+
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+  };
+  services.blueman.enable = true;
 
   home-manager.sharedModules = [
     (
       { ... }:
       {
-        wayland.windowManager.hyprland.settings.input.kb_layout = "pt";
+        wayland.windowManager.hyprland.settings = {
+          input.kb_layout = "pt";
+          xwayland = {
+            force_zero_scaling = true;
+          };
+        };
       }
     )
   ];

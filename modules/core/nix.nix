@@ -1,23 +1,31 @@
 # Nix Daemon Configuration Module
 {
   flake.modules.nixos.core =
-    { ... }:
+    { inputs, ... }:
     {
+      nixpkgs.overlays = [
+        # Overlay packages/
+        inputs.self.overlays.default
+      ];
 
       nix.settings = {
-        # Cache
         substituters = [
+          # Caches
           "https://cache.nixos.org"
           "https://nix-community.cachix.org"
           "https://cache.nixos-cuda.org"
         ];
         trusted-public-keys = [
+          # Cache Keys
           "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
           "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
           "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
         ];
-        # Optimizations and Features
+
+        # Store Optimizations
         auto-optimise-store = true;
+
+        # Enable Flakes
         experimental-features = [
           "nix-command"
           "flakes"

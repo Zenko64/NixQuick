@@ -8,13 +8,14 @@ let
   ];
 in
 {
+  # System Side Defaults
   flake.modules.nixos.desktop =
     {
-      inputs,
-      config,
       lib,
       pkgs,
+      config,
       namespace,
+      inputs,
       ...
     }:
     {
@@ -35,33 +36,33 @@ in
         programs.hyprland = {
           enable = true;
           withUWSM = true;
-          # This is to use only with UWSM
-          package =
-            inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland.overrideAttrs
-              (prev: {
-                # Extend the post-install script to remove what we don't need to ensure a good UX
-                # Deletes Non-UWSM Hyprland, Renames Desktop-Name Hyprland branding to just Hyprland.
-                postInstall = (prev.postInstall or "") + ''
-                  rm $out/share/wayland-sessions/hyprland.desktop
-                  sed -i 's/Name=Hyprland (uwsm-managed)/Name=Hyprland/' $out/share/wayland-sessions/hyprland-uwsm.desktop
-                  sed -i "s|start -e -D Hyprland hyprland.desktop|start -e -D Hyprland -- $out/bin/start-hyprland|" $out/share/wayland-sessions/hyprland-uwsm.desktop
-                '';
-                passthru.providedSessions = [ "hyprland-uwsm" ];
-              });
+
+          package = # UWSM Patches
+            inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland.overrideAttrs (prev: {
+              # Patch out unnecessary desktop entries
+              postInstall = (prev.postInstall or "") + ''
+                rm $out/share/wayland-sessions/hyprland.desktop
+                sed -i 's/Name=Hyprland (uwsm-managed)/Name=Hyprland/' $out/share/wayland-sessions/hyprland-uwsm.desktop
+                sed -i "s|start -e -D Hyprland hyprland.desktop|start -e -D Hyprland -- $out/bin/start-hyprland|" $out/share/wayland-sessions/hyprland-uwsm.desktop
+              '';
+              passthru.providedSessions = [ "hyprland-uwsm" ];
+            });
         };
       };
     };
 
+  # Home-Manager Configurations
   flake.modules.homeManager.desktop =
     {
-      config,
       lib,
-      osConfig,
       pkgs,
+      config,
+      osConfig,
       namespace,
       ...
     }:
     {
+      # User-Side Overrideables
       options.${namespace}.desktop.compositors.hyprland = {
         shell = lib.mkOption {
           type = lib.types.nullOr (lib.types.enum shells);
@@ -70,80 +71,22 @@ in
         };
       };
 
+      # User-Side Configurations
       config = lib.mkIf osConfig.${namespace}.desktop.compositors.hyprland.enable {
         home.packages = with pkgs; [
-          hyprpaper
-          hypridle
-          hyprpolkitagent
-          cliphist
           grimblast
           libnotify
           nwg-displays
-          wl-clipboard
-          nautilus
         ];
 
-        services = {
-          hypridle = {
-            enable = true;
-            # WARN: Turning the display off before locking the screen can result in you getting stuck in a blackscreen.
-            settings = {
-              general = {
-                before-sleep = "hyprlock";
-                after-sleep = "hyprctl dispatch dpms on";
-              };
-              listener = [
-                {
-                  timeout = 150;
-                  on-timeout = "brightnessctl -sd rgb:kbd_backlight set 0%; brightnessctl -s set 10%; hyprlock";
-                  on-resume = "brightnessctl -rd rgb:kbd_backlight; brightnessctl -r";
-                }
-                {
-                  timeout = 300;
-                  on-timeout = "hyprctl dispatch dpms off";
-                  on-resume = "hyprctl dispatch dpms on";
-                }
-              ];
-            };
-          };
-        };
-        systemd.user.services.hypridle = lib.mkForce { };
-
         programs = {
-          hyprlock = {
-            enable = true;
-            settings = {
-              general = {
-                hide_cursor = true;
-                ignore_empty_input = true;
-              };
-              animations = {
-                enabled = true;
-                fade_in = {
-                  duration = 300;
-                  bezier = "easeOutQuint";
-                };
-                fade_out = {
-                  duration = 300;
-                  bezier = "easeOutQuint";
-                };
-              };
-              background = lib.mkForce {
-                blur_passes = lib.mkForce 3;
-                blur_size = lib.mkForce 8;
-              };
-            };
-          };
-
-          # Default Apps
-          kitty.enable = true; # Kitty is the default terminal
-          satty.enable = true; # Satty is a Screenshot annotator
+          satty.enable = true; # Screenshot Annotator
         };
 
-        # Create Empty File For NWG-Displays That Hyprland Sources
+        # Empty NWG-Displays Config to avoid Hyprland errors on source
         systemd.user.tmpfiles.rules = [
-          "f /home/${config.home.username}/.config/hypr/monitors.conf 0644 ${config.home.username} users -"
-          "f /home/${config.home.username}/.config/hypr/workspaces.conf 0644 ${config.home.username} users -"
+          "f ${config.home.homeDirectory}/.config/hypr/monitors.conf 0644 ${config.home.username} users -"
+          "f ${config.home.homeDirectory}/.config/hypr/workspaces.conf 0644 ${config.home.username} users -"
         ];
 
         wayland.windowManager.hyprland = {
@@ -152,32 +95,21 @@ in
           systemd.enable = false;
 
           # Use the host portal and package configuration.
-          # Don't remove this
+          # Do NOT Remove.
           package = null;
           portalPackage = null;
 
           settings = {
-            # Initial Execution
-            exec-once = [
-              "uwsm app -- ${pkgs.hyprpolkitagent}/libexec/hyprpolkitagent"
-              "uwsm app -- ${lib.getExe pkgs.hyprpaper}"
-              "uwsm app -- ${lib.getExe pkgs.hypridle}"
-              "uwsm app -- ${lib.getExe pkgs.cliphist}"
-            ];
-
             # Variables
-            "$terminal" = "${lib.getExe pkgs.kitty}";
-            "$fileManager" = "${lib.getExe pkgs.nautilus}";
             "$mainMod" = "SUPER";
             "$altMod" = "SHIFT";
             "$subMod" = "CONTROL";
 
             # Environment
+            # Set XCursor and Hyprcursor from themes
             env = [
               "HYPRCURSOR_SIZE,24"
-              "HYPRCURSOR_THEME,Nordzy-hyprcursor-catppuccin-mocha-sky"
               "XCURSOR_SIZE,24"
-              "XCURSOR_THEME,Nordzy-catppuccin-mocha-sky"
             ];
 
             # Layout
@@ -189,29 +121,26 @@ in
               gaps_out = "15";
               layout = "dwindle";
               resize_on_border = true;
-              # New lesson: Stuff that can be undefined, or as part of a different module, must be shallowly merged instead of hardcoded defaults, to avoid weird errors.
-            }
-            // lib.optionalAttrs osConfig.stylix.enable {
-              "col.active_border" = lib.mkForce "rgba(ff96dcf2) rgba(468796f2) 45deg";
-              "col.inactive_border" = lib.mkForce "rgba(${config.lib.stylix.colors.base01}ff)";
             };
 
             dwindle = {
               preserve_split = true;
             };
-
             master.new_status = "master";
 
             # Visuals
             decoration = {
-              active_opacity = 0.95;
-              inactive_opacity = 0.8;
+              active_opacity = 0.925;
+              inactive_opacity = 0.75;
               rounding = 10;
               blur = {
                 enabled = true;
-                passes = 2;
-                size = 7;
-                vibrancy = 1;
+                passes = 3;
+                size = 5;
+                vibrancy = 1.5;
+                ignore_opacity = true;
+                noise = 0.12;
+                contrast = 2;
               };
             };
 
@@ -262,16 +191,9 @@ in
             bind = [
               # TODO: Add Media Keys
 
-              # Lock Screen
-              "$mainMod $altMod, L, exec, hyprlock"
-
               # Screenshots
               ", PRINT, exec, grimblast copy area"
               "$altMod, PRINT, exec, grimblast save area - | satty --filename -f"
-
-              # App launchers
-              "$mainMod, T, exec, $terminal"
-              "$mainMod, E, exec, $fileManager"
 
               # Window focus
               "$mainMod, W, movefocus, u"
@@ -355,8 +277,8 @@ in
             ];
 
             source = [
-              "~/.config/hypr/monitors.conf"
-              "~/.config/hypr/workspaces.conf"
+              "${config.home.homeDirectory}/.config/hypr/monitors.conf"
+              "${config.home.homeDirectory}/.config/hypr/workspaces.conf"
             ];
           };
 

@@ -16,37 +16,22 @@
             && config.${namespace}.desktop.compositors.hyprland.shell == "ashell"
           )
           {
-            # Required Software
-            programs = {
+            # Enable the components this shell uses
+            ${namespace}.desktop.compositors.hyprland._components = {
+              walker.enable = true;
+              hyprpaper.enable = true;
+              hyprpolkit.enable = true;
               hyprlock.enable = true;
-            };
-            services = {
-              mako.enable = true;
-              elephant.enable = true;
-              walker = {
+              hypridle = {
                 enable = true;
-                enableElephantIntegration = true;
+                onIdle = lib.getExe pkgs.hyprlock; # Trigger Hyprlock on idle
               };
             };
-            systemd.user.services = {
-              # Allow Home-Manager to manage settings for these services, But Don't Make SystemD Services.
-              mako = lib.mkForce { };
-              elephant = lib.mkForce { };
-              walker = lib.mkForce { };
-            };
 
-            # Binds
+            # Rules
             wayland.windowManager.hyprland.settings = {
-              exec-once = [
-                "uwsm app -- ${lib.getExe pkgs.ashell}"
-                "uwsm app -- ${lib.getExe pkgs.mako}"
-                "uwsm app -- ${lib.getExe pkgs.elephant}"
-                "uwsm app -- ${lib.getExe pkgs.walker} --gapplication-service"
-              ];
-
-              bind = [
-                "SUPER, R, exec, ${lib.getExe pkgs.walker}"
-              ];
+              gaps_out = "15 15 10 15";
+              exec-once = [ "uwsm app -- ashell" ];
               layerrule = [
                 "blur on, match:namespace ashell-main-layer"
                 "ignore_alpha 0, match:namespace ashell-main-layer"
@@ -71,6 +56,7 @@
                     "Tray"
                     [
                       "SystemInfo"
+                      "Notifications"
                       "Tempo"
                       "Privacy"
                       "Settings"
@@ -104,12 +90,32 @@
                   truncate_title_after_length = 64;
                 };
 
+                media_player = {
+                  truncate_title_after_length = 64;
+                };
+
                 tempo = {
                   clock_format = "%a %d - %R";
                   weather_location = {
-                    City = "Loulé";
+                    City = "${config.${namespace}.desktop.settings.weather.location}";
                   };
                   weather_indicator = "IconAndTemperature";
+                };
+
+                notifications = {
+                  format = "%m/%d %H:%M";
+                  show_timestamps = true;
+                  show_bodies = false;
+                  grouped = true;
+                  toast = true;
+                  toast_position = "top_right";
+                  toast_timeout = 4000;
+                  toast_limit = 5;
+                  toast_max_height = 150;
+                  blocklist = [
+                    "blueman"
+                    "^org\\.gnome\\."
+                  ];
                 };
 
                 settings = {
@@ -137,31 +143,8 @@
                 };
 
                 appearance = {
+                  # scale_factor = 1.12;
                   style = "Islands";
-                  #opacity = 0.72;
-                  #menu.opacity = 0.72;
-                  # primary_color = "#ff96dc";
-                  # success_color = "#ff96dc";
-                  # text_color = "#dbe3ff";
-                  #  workspace_colors = [
-                  #    "#ff96dc"
-                  #    "#104e64"
-                  #  ];
-                  #  special_workspace_colors = [
-                  #    "#104e64"
-                  #    "#ff96dc"
-                  #  ];
-                  #  background_color = {
-                  #    base = "#281e19";
-                  #    weak = "#292524";
-                  #    strong = "#0c0d14";
-                  #  };
-                  #  danger_color = {
-                  #    base = "#f37671";
-                  #    weak = "#ffdf7b";
-                  #  };
-                  #  secondary_color.base = "#292524";
-                  #};
                 };
               };
             };

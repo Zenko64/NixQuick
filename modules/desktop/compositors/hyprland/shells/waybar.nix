@@ -12,48 +12,31 @@
       config =
         lib.mkIf
           (
-            osConfig.${namespace}.desktop.compositors.hyprland.enable == true
+            osConfig.${namespace}.desktop.compositors.hyprland.enable
             && config.${namespace}.desktop.compositors.hyprland.shell == "waybar"
           )
           {
-            # Required Software
-            programs = {
-              hyprlock.enable = true;
-            };
-            services = {
+            # Enable the components this shell uses
+            ${namespace}.desktop.compositors.hyprland._components = {
+              walker.enable = true;
               mako.enable = true;
-              elephant.enable = true;
-              walker = {
+              hyprpaper.enable = true;
+              hyprpolkit.enable = true;
+              hyprlock.enable = true;
+              hypridle = {
                 enable = true;
-                enableElephantIntegration = true;
+                onIdle = lib.getExe pkgs.hyprlock; # Trigger Hyprlock on idle
               };
-            };
-            systemd.user.services = {
-              # Allow Home-Manager to manage settings for these services, But Don't Make SystemD Services.
-              mako = lib.mkForce { };
-              elephant = lib.mkForce { };
-              walker = lib.mkForce { };
             };
 
             # Binds
             wayland.windowManager.hyprland.settings = {
-              exec-once = [
-                "uwsm app -- ${lib.getExe pkgs.waybar}"
-                "uwsm app -- ${lib.getExe pkgs.mako}"
-                "uwsm app -- ${lib.getExe pkgs.elephant}"
-                "uwsm app -- ${lib.getExe pkgs.walker} --gapplication-service"
-              ];
-
-              bind = [
-                "SUPER, R, exec, ${lib.getExe pkgs.walker}"
-              ];
               layerrule = [
               ];
             };
 
             programs.waybar = {
               enable = true;
-
             };
           };
     };

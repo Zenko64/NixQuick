@@ -9,7 +9,14 @@
       ...
     }:
     {
-      config.services.greetd = lib.mkIf (config.${namespace}.desktop.greeter == "tuigreet") {
+      options.${namespace}.desktop.greeters.tuigreet = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Enables the Tuigreet Login Greeter.";
+        };
+      };
+      config.services.greetd = lib.mkIf (config.${namespace}.desktop.greeters.tuigreet.enable) {
         enable = true;
         settings.default_session =
           let
