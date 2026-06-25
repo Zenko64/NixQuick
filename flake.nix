@@ -100,7 +100,7 @@
               if config.flake.modules.nixos ? ${arch} then [ config.flake.modules.nixos.${arch} ] else [ ];
           };
 
-          # perClass gets the host class. Inject modules defined in the map's attribute array for that class.
+          # Inject modules depending on host class
           perClass =
             class:
             let
@@ -124,7 +124,7 @@
               modules = classMap.${class} or [ ];
             };
 
-          # Modules Shared Across Everything.
+          # Code shared across all hosts
           shared = {
             # Loads modules that can either bring behavior, or options that cause behavior.
             modules = [
@@ -134,14 +134,12 @@
               inputs.lanzaboote.nixosModules.lanzaboote
               inputs.nix-topology.nixosModules.default
 
-              # Inject the flake package overlays into all systems under nixpkgs (pkgs.${namespace})
+              # Inject overlay definition
               { nixpkgs.overlays = [ config.flake.overlays.default ]; }
 
-              # Core Modules
               config.flake.modules.nixos.core
             ];
 
-            # Pass down the flake inputs, and the defined namespace.
             specialArgs = {
               inherit inputs;
               namespace = config.namespace;
@@ -149,7 +147,7 @@
           };
         };
 
-        # Overlay that injects packages exported by pkgs-by-name into the namespace.
+        # * Overlay Definition that injects flake packages into Nixpkgs (pkgs.${namespace}) *
         flake.overlays.default =
           let
             namespace = config.namespace;
@@ -162,6 +160,7 @@
             }
           );
 
+        # * Ouputs that run for every system *
         perSystem =
           {
             pkgs,
@@ -169,19 +168,23 @@
             ...
           }:
           let
-            netboot = inputs.self.nixosConfigurations.netboot.config.system.build;
-            iso = inputs.self.nixosConfigurations.iso.config.system.build.isoImage;
-            sdImage = inputs.self.nixosConfigurations.sdImage.config.system.build.sdImage;
+            netboot = config.flake.nixosConfigurations.netboot.config.system.build;
+            iso = config.flake.nixosConfigurations.iso.config.system.build.isoImage;
+            sdImage = config.flake.nixosConfigurations.sdImage.config.system.build.sdImage;
           in
           {
+            # * Buildables *
             packages = {
               sdImage = sdImage;
               iso = iso;
               default = iso;
-              topology = inputs.self.topology.${system}.config.output;
+              topology = config.flake.topology.${system}.config.output;
             };
+
+            # * Where PKGS-BY-NAME looks for packages *
             pkgsDirectory = ./packages;
 
+            # * Development Shell *
             devShells.default = pkgs.mkShell {
               buildInputs = [
                 pkgs.nixd
