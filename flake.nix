@@ -107,6 +107,12 @@
               classMap = {
                 desktops = [
                   config.flake.modules.nixos.desktop
+                  # Inject Home-Manager Modules
+                  {
+                    home-manager.sharedModules = [
+                      config.flake.modules.homeManager.desktop
+                    ];
+                  }
                   inputs.stylix.nixosModules.stylix
                 ];
                 servers = [

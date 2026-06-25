@@ -2,15 +2,9 @@
   flake.modules.nixos.desktop =
     {
       pkgs,
-      inputs,
       ...
     }:
     {
-      # Inject Home-Manager Modules
-      home-manager.sharedModules = [
-        inputs.self.modules.homeManager.desktop
-      ];
-
       # System Dependencies
       networking.networkmanager.enable = true;
       programs = {
