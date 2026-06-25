@@ -65,8 +65,8 @@
     };
 
     # Toys
-    cava.enable = true;
     fastfetch.enable = true;
+    cava.enable = true;
 
     # Devtools
     direnv.enable = true;

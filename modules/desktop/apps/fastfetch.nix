@@ -1,53 +1,88 @@
-# Fastfetch (Home Manager)
-#
-# Contributes to the shared desktop home module, so every desktop home gets it.
-# The logo points at an ASCII art file that must exist at the referenced path,
-# otherwise the logo renders blank. See the note next to logo.source below.
+# Fastfetch Default Configuration
+{ ... }:
 {
-  flake.modules.homeManager.desktop = {
-    programs.fastfetch = {
-      enable = true;
-
-      settings = {
-        "$schema" = "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json";
-
-        logo = {
-          # This file is not managed by Nix yet. Drop the art here, or swap this for a
-          # builtin (source = "nixos"; type = "builtin";) or a Nix-managed file.
-          source = "~/.config/fastfetch/ascii/arch.txt";
-          height = 22;
-          padding.bottom = 1;
+  flake.modules.homeManager.desktop =
+    {
+      config,
+      ...
+    }:
+    let
+      c =
+        base: fallback:
+        if config.stylix.enable then config.lib.stylix.colors.withHashtag.${base} else fallback;
+    in
+    {
+      programs.fastfetch.settings = {
+        display = {
+          key.width = 10;
+          separator = "";
         };
 
-        display.separator = " ";
+        logo = {
+          source = "nixos_small";
+          padding = {
+            top = 1;
+            left = 1;
+          };
+        };
 
         modules = [
-          { key = "╭───────────╮"; type = "custom"; }
-          { key = "│  user    │"; type = "title"; format = "{user-name}"; }
-          { key = "│ 󰇅 hname   │"; type = "title"; format = "{host-name}"; }
-          { key = "│ 󰅐 uptime  │"; type = "uptime"; }
-          { key = "│  distro  │"; type = "os"; }
-          { key = "│  kernel  │"; type = "kernel"; }
-          { key = "│  wm      │"; type = "wm"; }
-          { key = "│  term    │"; type = "terminal"; }
-          { key = "│  shell   │"; type = "shell"; }
-          { key = "│ 󰍛 cpu     │"; type = "cpu"; showPeCoreCount = true; }
-          { key = "│ 󰉉 disk    │"; type = "disk"; folders = "/"; }
-          { key = "│  memory  │"; type = "memory"; }
-          { key = "├───────────┤"; type = "custom"; }
-          { key = "│ PC        │"; type = "host"; format = "{5} {1} ({2})"; }
-          { key = "│ ├ 󰢮 gpu   │"; type = "gpu"; format = "{1} {2} @ {12}"; }
-          { key = "│ ├ 󰓡 swap  │"; type = "swap"; }
-          { key = "│ ├  disp  │"; type = "monitor"; format = "{1} px @ {2} Hz - {3} mm ({4} inches, {5} pp)"; }
+          "break"
           {
-            key = "│ └  dtime │";
             type = "command";
-            text = "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days";
+            key = " user";
+            keyColor = c "base0E" "#ccccff";
+            text = "echo $USER@$(hostnamectl hostname)";
           }
-          { key = "│  colors  │"; type = "colors"; symbol = "circle"; }
-          { key = "╰───────────╯"; type = "custom"; }
+          {
+            type = "os";
+            key = " os";
+            keyColor = c "base0E" "#c9cfff";
+            format = "{name} {version-id}";
+          }
+          {
+            type = "command";
+            key = " kernel";
+            keyColor = c "base0D" "#c6d2ff";
+            text = "echo $(uname -r | cut -d- -f1) $(uname -m)";
+          }
+          {
+            type = "shell";
+            key = "󰞷 shell";
+            keyColor = c "base0C" "#c0d9ff";
+            format = "{pretty-name}";
+          }
+          {
+            type = "cpu";
+            key = " cpu";
+            keyColor = c "base0D" "#c1d7ff";
+            format = "{name}";
+          }
+          {
+            type = "gpu";
+            key = "󰢮 gpu";
+            keyColor = c "base0C" "#bedcff";
+            format = "{vendor} {name}";
+          }
+          {
+            type = "memory";
+            key = " ram";
+            keyColor = c "base0C" "#bddeff";
+            format = "{used} / {total} ({percentage})";
+          }
+          {
+            type = "disk";
+            folders = "/";
+            key = "󰉉 ssd";
+            keyColor = c "base0B" "#bde0fe";
+            format = "{size-used} / {size-total} ({size-percentage})";
+          }
+          {
+            type = "colors";
+            symbol = "circle";
+          }
+          "break"
         ];
       };
     };
-  };
 }

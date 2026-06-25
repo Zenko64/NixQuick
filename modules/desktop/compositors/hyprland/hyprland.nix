@@ -187,10 +187,22 @@ in
             };
             gesture = "3, horizontal, workspace";
 
-            # Keybinds
-            bind = [
-              # TODO: Add Media Keys
+            # Keybinds~
+            bindel = [
+              ", XF86AudioRaiseVolume, exec, ${lib.getExe' pkgs.wireplumber "wpctl"} set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+"
+              ", XF86AudioLowerVolume, exec, ${lib.getExe' pkgs.wireplumber "wpctl"} set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+              ", XF86MonBrightnessUp, exec, ${lib.getExe pkgs.brightnessctl} s 5%+"
+              ", XF86MonBrightnessDown, exec, ${lib.getExe pkgs.brightnessctl} s 5%-"
+            ];
+            bindl = [
+              ", XF86AudioMute, exec, ${lib.getExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_AUDIO_SINK@ toggle"
+              ", XF86AudioMicMute, exec, ${lib.getExe' pkgs.wireplumber "wpctl"} set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+              ", XF86AudioPlay, exec, ${lib.getExe pkgs.playerctl} play-pause"
+              ", XF86AudioNext, exec, ${lib.getExe pkgs.playerctl} next"
+              ", XF86AudioPrev, exec, ${lib.getExe pkgs.playerctl} previous"
+            ];
 
+            bind = [
               # Screenshots
               ", PRINT, exec, grimblast copy area"
               "$altMod, PRINT, exec, grimblast save area - | satty --filename -f"

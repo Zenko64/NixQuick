@@ -143,7 +143,7 @@
                 };
 
                 appearance = {
-                  # scale_factor = 1.12;
+                  scale_factor = 1.12;
                   style = "Islands";
                 };
               };

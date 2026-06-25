@@ -1,5 +1,5 @@
 {
-  description = "Simi's Personal NixQuick Configuration";
+  description = "Default NixQuick Configuration";
 
   inputs = {
     # System
@@ -93,10 +93,14 @@
             desktops = "nixos";
             servers = "nixos";
           };
+
+          # Injects architecture specific core modules, if they exist.
           perArch = arch: {
             modules =
               if config.flake.modules.nixos ? ${arch} then [ config.flake.modules.nixos.${arch} ] else [ ];
           };
+
+          # perClass gets the host class. Inject modules defined in the map's attribute array for that class.
           perClass =
             class:
             let
@@ -113,6 +117,8 @@
             {
               modules = classMap.${class} or [ ];
             };
+
+          # Modules Shared Across Everything.
           shared = {
             # Loads modules that can either bring behavior, or options that cause behavior.
             modules = [
@@ -125,6 +131,8 @@
               # Core Modules
               config.flake.modules.nixos.core
             ];
+
+            # Pass down the flake inputs, and the defined namespace.
             specialArgs = {
               inherit inputs;
               namespace = config.namespace;
@@ -132,6 +140,7 @@
           };
         };
 
+        # Overlay that injects packages exported by pkgs-by-name into the namespace.
         flake.overlays.default =
           let
             namespace = config.namespace;
@@ -147,6 +156,7 @@
         perSystem =
           {
             pkgs,
+            system,
             ...
           }:
           let
@@ -159,9 +169,10 @@
               sdImage = sdImage;
               iso = iso;
               default = iso;
+              topology = inputs.self.topology.${system}.config.output;
             };
+            pkgsDirectory = ./packages;
 
-            pkgsDirectory = ./packages; # Other packages, not host built results
             devShells.default = pkgs.mkShell {
               buildInputs = [
                 pkgs.nixd

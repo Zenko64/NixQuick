@@ -4,7 +4,7 @@
     { inputs, ... }:
     {
       nixpkgs.overlays = [
-        # Overlay packages/
+        # Overlay the exported packages into pkgs.${namespace}
         inputs.self.overlays.default
       ];
 

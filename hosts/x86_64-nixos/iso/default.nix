@@ -1,4 +1,4 @@
-# X86 NixOS Installer PXE Configuration
+# X86 NixOS Installer Configuration
 {
   namespace,
   inputs,
