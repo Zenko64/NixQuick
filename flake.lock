@@ -135,11 +135,11 @@
         "quickshell": "quickshell"
       },
       "locked": {
-        "lastModified": 1782375516,
-        "narHash": "sha256-6pX6OFMScAonhT0VW8TMfxTFjdwADA8Jey+aJut8tY4=",
+        "lastModified": 1782473133,
+        "narHash": "sha256-CyI22BFd5eXnrTw8M3n7R4/j1RzTUkI3j31Pzu9yCLY=",
         "owner": "caelestia-dots",
         "repo": "shell",
-        "rev": "3bbf9f8d33a13dd56d8242d7d864472ba4ea9185",
+        "rev": "911a7926496b5e5d4283ac7d34208359120e1615",
         "type": "github"
       },
       "original": {
@@ -473,11 +473,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1782464299,
-        "narHash": "sha256-ktgh3f1aQV4vusz0swGHI0vVbHOQs4SXj8vR/p3Q45c=",
+        "lastModified": 1782468408,
+        "narHash": "sha256-NyNvg/DtsFi05xbxNL5LI9guRgbYdumxPjGwg/PX5g0=",
         "ref": "refs/heads/main",
-        "rev": "6835443d7c5c9d831db4d1371e0fd5768ed85ee6",
-        "revCount": 7503,
+        "rev": "afe2c390ab621e7a1dbd06744d33bc123acfe1f9",
+        "revCount": 7505,
         "submodules": true,
         "type": "git",
         "url": "https://github.com/hyprwm/Hyprland"

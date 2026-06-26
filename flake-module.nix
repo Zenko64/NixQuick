@@ -1,8 +1,11 @@
 {
-  withSystem,
   import-tree,
-  config,
   inputs,
+  ...
+}:
+{
+  config,
+  withSystem,
   ...
 }:
 {
@@ -23,9 +26,25 @@
   ];
 
   easy-hosts = {
-    path = ./hosts;
-    autoConstruct = true;
+    hosts = {
+      iso = {
+        arch = "x86_64";
+        class = "installer";
+        path = ./hosts/x86_64-installer/iso;
+      };
+      netboot = {
+        arch = "x86_64";
+        class = "installer";
+        path = ./hosts/x86_64-installer/netboot;
+      };
+      sdImage = {
+        arch = "aarch64";
+        class = "installer";
+        path = ./hosts/aarch64-installer/sdImage;
+      };
+    };
     additionalClasses = {
+      installer = "nixos";
       desktops = "nixos";
       servers = "nixos";
     };
@@ -41,6 +60,9 @@
       class:
       let
         classMap = {
+          installer = [
+            config.flake.modules.nixos.installer
+          ];
           desktops = [
             config.flake.modules.nixos.desktop
             # Inject Home-Manager Modules

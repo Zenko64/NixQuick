@@ -1,5 +1,5 @@
 # Users and Homes
-{ inputs, pkgs, ... }:
+{ self, pkgs, ... }:
 let
   sshPubKey = "ssh-ed25519 AAAA...REPLACE_ME you@host";
 in
@@ -17,9 +17,9 @@ in
   };
 
   # Don't use Relative Paths as it is impure.
-  # Always append the path to inputs.self, as inputs.self leads to the root of the flake project.
+  # Append the path to the argument "self" (the flake root). Don't use inputs.self as the inputs are inherited from NixQuick.
   # TODO: Correct this after setting up a home-manager.
   #home-manager.users.user.imports = [
-  #  "${inputs.self}/homes/user/profiles/desktop.nix"
+  #  "${self}/homes/user/profiles/desktop.nix"
   #];
 }
