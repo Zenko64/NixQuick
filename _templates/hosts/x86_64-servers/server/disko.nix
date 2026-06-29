@@ -28,7 +28,10 @@
           size = "100%";
           content = {
             type = "btrfs";
-            extraArgs = [ "-L" "NixRoot" ]; # Extra Args Can Be Encoded Differently Depending On The Disk Type. This Sets The Label.
+            extraArgs = [
+              "-L"
+              "NixRoot"
+            ]; # Extra Args Can Be Encoded Differently Depending On The Disk Type. This Sets The Label.
             subvolumes = {
               "@" = {
                 mountpoint = "/";

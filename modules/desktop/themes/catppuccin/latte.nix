@@ -7,6 +7,12 @@ import ../_mkTheme.nix {
       polarity = "light";
       image = lib.mkDefault ./light.png;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-latte.yaml";
+      opacity = {
+        applications = 0.85;
+        desktop = 0.875;
+        popups = 0.9;
+        terminal = 0.85;
+      };
       cursor = {
         package = pkgs.nordzy-cursor-theme;
         name = "Nordzy-catppuccin-latte-sky";

@@ -7,6 +7,12 @@ import ../_mkTheme.nix {
       polarity = "dark";
       image = lib.mkDefault ./dark.png;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-frappe.yaml";
+      opacity = {
+        applications = 0.85;
+        desktop = 0.875;
+        popups = 0.9;
+        terminal = 0.85;
+      };
       cursor = {
         package = pkgs.nordzy-cursor-theme;
         name = "Nordzy-catppuccin-frappe-sky";

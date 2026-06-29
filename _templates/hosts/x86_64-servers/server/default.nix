@@ -7,7 +7,7 @@
     ./services.nix
     ./programs.nix
   ];
-  
+
   # Network Configuration (NixOS Wiki)
   networking = {
     useDHCP = false;
