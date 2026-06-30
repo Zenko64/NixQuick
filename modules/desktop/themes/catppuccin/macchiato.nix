@@ -1,5 +1,5 @@
-{ ... }:
-import ../_mkTheme.nix {
+{ nixquick, ... }:
+nixquick.mkTheme {
   themeName = "catppuccin-macchiato";
   stylixConfig = { pkgs, lib }: {
     stylix = {

@@ -1,5 +1,5 @@
-{ ... }:
-import ../_mkTheme.nix {
+{ nixquick, ... }:
+nixquick.mkTheme {
   themeName = "tokyo-night-light";
   stylixConfig = { pkgs, ... }: {
     stylix = {

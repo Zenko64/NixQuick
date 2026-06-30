@@ -54,7 +54,17 @@
       flake-parts,
       ...
     }:
-    flake-parts.lib.mkFlake { inherit inputs; } (
+    let
+      libs = import ./libs/default.nix;
+    in
+    flake-parts.lib.mkFlake
+      {
+        inherit inputs;
+        specialArgs = {
+          nixquick = libs;
+        };
+      }
+      (
       {
         lib,
         flake-parts-lib,
@@ -62,7 +72,7 @@
       }:
       let
         inherit (flake-parts-lib) importApply;
-        flakeModules.default = importApply ./flake-module.nix {
+        flakeModules.default = importApply ./flakeModules {
           inherit inputs;
           import-tree = inputs.import-tree;
         };

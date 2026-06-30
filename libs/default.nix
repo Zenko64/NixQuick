@@ -1,0 +1,3 @@
+{
+  mkTheme = import ./mkTheme.nix;
+}
