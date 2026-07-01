@@ -33,23 +33,9 @@
 
   config = {
     easy-hosts = {
-      hosts = {
-        iso = {
-          arch = "x86_64";
-          class = "installer";
-          path = ../hosts/x86_64-installer/iso;
-        };
-        netboot = {
-          arch = "x86_64";
-          class = "installer";
-          path = ../hosts/x86_64-installer/netboot;
-        };
-        sdImage = {
-          arch = "aarch64";
-          class = "installer";
-          path = ../hosts/aarch64-installer/sdImage;
-        };
-      };
+      path = ./hosts;
+      autoConstruct = true;
+      
       additionalClasses = {
         installer = "nixos";
         desktops = "nixos";
