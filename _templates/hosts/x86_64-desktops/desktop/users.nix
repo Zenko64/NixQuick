@@ -1,7 +1,7 @@
 # Users and Homes
 { self, pkgs, ... }:
 let
-  sshPubKey = "ssh-ed25519 AAAA...REPLACE_ME you@host";
+  sshPubKey = "";
 in
 {
   users.users.root.openssh.authorizedKeys.keys = [ sshPubKey ];
@@ -11,13 +11,12 @@ in
     home = "/home/user";
     createHome = true;
     initialPassword = "password"; # Initial password. Change immediately after the first login.
-    extraGroups = [ "wheel" ]; # Add all your needed user groups, check Arch Wiki for a list of groups and their purpose.
+    extraGroups = [ "wheel" "networkmanager" "render" "input" "video" "audio" ]; # Add all your needed user groups, check Arch Wiki for a list of groups and their purpose.
     shell = pkgs.fish;
     openssh.authorizedKeys.keys = [ sshPubKey ];
   };
 
   # Don't use Relative Paths as it is impure.
-  # Append the path to the argument "self" (the flake root). Don't use inputs.self as the inputs are inherited from NixQuick.
   # TODO: Correct this after setting up a home-manager.
   #home-manager.users.user.imports = [
   #  "${self}/homes/user/profiles/desktop.nix"
