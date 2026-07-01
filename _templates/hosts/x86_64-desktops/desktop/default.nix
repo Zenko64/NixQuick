@@ -15,7 +15,7 @@
   local = {
     desktop = {
       theme = "catppuccin-mocha";
-      compositors.hyprland.enable = true; # Shell is chosen per-home: see homes/user/profiles/desktop.nix
+      compositors.hyprland.enable = true;
       greeters.tuigreet.enable = true;
     };
     boot.loader.systemd-boot.enable = true;

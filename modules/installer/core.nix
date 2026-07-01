@@ -44,19 +44,18 @@
           | Welcome to the NixQuick Installer!                  |
           |                                                     |
           | - SSH is enabled by default.                        |
-          |   You can log-in as "nixos" with an empty password. |
-          | - To access a root shell, use "sudo bash".          |
+          | - The password for 'nixos' and 'root' is 'nixquick'.|
           | - To connect to a Network, "nmtui" is available.    |
           |_____________________________________________________|
         '';
         users = {
-          nixos = lib.mkDefault {
+          nixos = {
             isNormalUser = true;
             description = "NixOS Installer User";
             extraGroups = [ "wheel" ];
-            password = "";
+            password = "nixquick";
           };
-          root.password = lib.mkDefault "";
+          root.password = "nixquick";
         };
       };
     };
