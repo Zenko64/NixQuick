@@ -12,7 +12,16 @@
     <img src="https://img.shields.io/badge/flake-parts-green" alt="Flake Parts">
   </p>
 </div>
+<div align="center">
+  <video width="640" height="360" controls>
+    <source src="https://user-cdn.hackclub-assets.com/019f2296-0e4c-70b6-a3ef-6a8952e9c541/demo.mp4" type="video/mp4">
+  </video>
+</div>
 <hr>
+
+
+https://github.com/user-attachments/assets/62ffb655-a05e-4175-a3fa-40c00403a144
+
 
 ## Introduction
 
