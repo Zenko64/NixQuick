@@ -2,20 +2,30 @@ name: "Build ISO Installer"
 
 on:
   workflow_dispatch: 
-
+  
+permissions:
+  contents: write
+  
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: DeterminateSystems/nix-installer-action@main
-
       - name: "Build Installer ISO"
         run: |
           nix build .#iso
+          echo "TAG_NAME=$(basename $(readlink -f result/) | cut -c 1-6)" >> $GITHUB_ENV
+          
 
-      - uses: actions/upload-artifact@v7
+      #- uses: actions/upload-artifact@v7
+      #  with:
+      #    name: 'Installer ISO'
+      #    path: 'result/iso/*.iso'
+      #    if-no-files-found: 'error'
+
+      - uses: softprops/action-gh-release@v3
         with:
-          name: 'Installer ISO'
-          path: 'result/iso/*.iso'
-          if-no-files-found: 'error'
+          files: "result/iso/*.iso"
+          tag_name: "${{ env.TAG_NAME }}"
+          name: "Release ${{ env.TAG_NAME }}"
