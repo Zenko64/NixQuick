@@ -14,9 +14,8 @@ jobs:
         run: |
           nix build .#iso
 
-      - uses: echapmanFromBunnings/upload-artifact@3.0
+      - uses: actions/upload-artifact@v7
         with:
           name: 'Installer ISO'
           path: 'result/iso/*.iso'
           if-no-files-found: 'error'
-          retention-days: 7
