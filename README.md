@@ -1,6 +1,6 @@
 <div align="center">
   <p align="center">
-    <img src="https://raw.githubusercontent.com/Zenko64/NixQuick/refs/heads/main/assets/logo.svg" width="128" alt="NixQuick Logo">
+    <img src="https://raw.githubusercontent.com/Zenko64/NixQuick/refs/heads/main/_assets/logo.svg" width="128" alt="NixQuick Logo">
   </p>
   <h1>NixQuick</h1>
 
