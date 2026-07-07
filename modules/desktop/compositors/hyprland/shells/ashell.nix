@@ -9,11 +9,11 @@
       ...
     }:
     {
-      config = lib.mkMerge [
-        # Self-register into the shell selector's allow-list.
+      config = lib.mkMerge [ # (MkMerge is needed since we are merging multiple settings and one of them is guarded)
+        # Inject The Shell Module Into The Shells Registry
         { ${namespace}.desktop.compositors.hyprland._shells = [ "ashell" ]; }
 
-        (lib.mkIf
+        (lib.mkIf # Verify the shell and hyprland are enabled
           (
             osConfig.${namespace}.desktop.compositors.hyprland.enable
             && config.${namespace}.desktop.compositors.hyprland.shell == "ashell"
@@ -31,7 +31,7 @@
               };
             };
 
-            # Rules
+            # Inject Shell-Specific Configuration Into Hyprland
             wayland.windowManager.hyprland.settings = {
               general.gaps_out = lib.mkForce "15 15 0 15";
               exec-once = [ "uwsm app -- ashell" ];
@@ -43,6 +43,7 @@
               ];
             };
 
+            # Shell Configuration
             programs.ashell = {
               enable = true;
               settings = {

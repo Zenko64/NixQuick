@@ -108,10 +108,6 @@
   ];
 
   bind = [
-    # Screenshots
-    ", PRINT, exec, grimblast copy area"
-    "$altMod, PRINT, exec, grimblast save area - | satty --filename -f"
-
     # Window focus
     "$mainMod, W, movefocus, u"
     "$mainMod, A, movefocus, l"

@@ -1,4 +1,4 @@
-# Nix Daemon Configuration Module
+# Nix Daemon Module
 {
   flake.modules.nixos.core =
     { ... }:

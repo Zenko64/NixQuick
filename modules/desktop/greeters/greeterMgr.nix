@@ -1,3 +1,4 @@
+# Greeter Registry
 {
   flake.modules.nixos.greeters =
     {

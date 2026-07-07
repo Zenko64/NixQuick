@@ -1,29 +1,20 @@
 {
-  import-tree,
   inputs,
-  ...
-}:
-{
   config,
   lib,
   withSystem,
-  self,
   ...
 }:
 {
-  # Flake Modules To Import
   imports = [
-    # Libraries
-    inputs.disko.flakeModule
-    inputs.easy-hosts.flakeModule
     inputs.flake-parts.flakeModules.modules
     inputs.pkgs-by-name.flakeModule
+    inputs.disko.flakeModule
+    inputs.easy-hosts.flakeModule
     inputs.home-manager.flakeModules.home-manager
 
-    # Main System Modules
-    (import-tree ../modules)
+    (inputs.import-tree ../modules)
   ];
-
   options.namespace = lib.mkOption {
     type = lib.types.str;
     default = "local";
@@ -31,6 +22,7 @@
   };
 
   config = {
+    # Easy-Hosts Configuration
     easy-hosts = {
       path = ../hosts;
       autoConstruct = true;
@@ -53,7 +45,6 @@
               config.flake.modules.nixos.desktop
               config.flake.modules.nixos.features
               config.flake.modules.nixos.greeters
-              # Inject Home-Manager Modules
               {
                 home-manager.sharedModules = [
                   config.flake.modules.homeManager.desktop
@@ -70,31 +61,25 @@
           modules = classMap.${class} or [ ];
         };
 
-      # Code shared across all hosts
       shared = {
-        # Loads modules that can either bring behavior, or options that cause behavior.
         modules = [
-          # Libs
+          config.flake.modules.nixos.core
           inputs.disko.nixosModules.disko
           inputs.sops-nix.nixosModules.sops
           inputs.lanzaboote.nixosModules.lanzaboote
 
-          # Inject overlay definition
           { nixpkgs.overlays = [ config.flake.overlays.default ]; }
 
-          config.flake.modules.nixos.core
         ];
 
         specialArgs = {
-          inputs = inputs // {
-            inherit self;
-          };
+          inputs = inputs;
           namespace = config.namespace;
         };
       };
     };
 
-    # * Overlay Definition that injects flake packages into Nixpkgs (pkgs.${namespace}) *
+    # Overlay Definition That Injects Namespace Packages Into The Consumer
     flake.overlays.default =
       let
         namespace = config.namespace;
@@ -107,7 +92,8 @@
         }
       );
 
-    # * Ouputs that run for every system *
+
+    # Outputs For Each System
     perSystem =
       {
         pkgs,

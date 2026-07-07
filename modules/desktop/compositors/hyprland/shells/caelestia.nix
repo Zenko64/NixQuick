@@ -15,9 +15,10 @@
       ];
 
       config = lib.mkMerge [
-        # Self-register into the shell selector's allow-list.
+        # Register the shell into the shell registry
         { ${namespace}.desktop.compositors.hyprland._shells = [ "caelestia" ]; }
 
+        # Guard The Shell
         (lib.mkIf
           (
             osConfig.${namespace}.desktop.compositors.hyprland.enable
@@ -71,7 +72,7 @@
               };
             };
 
-            # Binds
+            # Hyprland Shell-Specifics
             wayland.windowManager.hyprland.settings = {
               general.gaps_out = lib.mkForce "5 5 5 5";
               bind = [ "$mainMod, R, exec, caelestia shell drawers toggle launcher" ];

@@ -1,4 +1,4 @@
-# The Networking Module
+# Networking Module
 # Override Default Settings Put Here Per Host.
 {
   flake.modules.nixos.core =

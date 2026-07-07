@@ -1,7 +1,4 @@
-# Shell Manager — registry, selector, and validation.
-# Each shell self-registers into `_shells` (see shells/<name>.nix); `shell` picks one.
-# A consumer flake adds its own shell the same way: register a name + a
-# `mkIf (shell == "<name>")` block — no fork needed.
+# Hyprland Shell Registry Module
 {
   flake.modules.homeManager.desktop =
     {
@@ -14,8 +11,9 @@
       cfg = config.${namespace}.desktop.compositors.hyprland;
     in
     {
+      # Shell Registry
       options.${namespace}.desktop.compositors.hyprland = {
-        _shells = lib.mkOption {
+        _shells = lib.mkOption { # Push Your Shells Name Here From Their Module
           internal = true;
           default = [ ];
           type = lib.types.listOf lib.types.str;

@@ -29,7 +29,6 @@
       config = lib.mkMerge [
         (lib.mkIf systemd-boot.enable {
           boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
-          boot.loader.systemd-boot.editor = false; # Security Measure
           boot.loader.systemd-boot.enable = !systemd-boot.secureBoot; # SystemD-Boot must be false if secureBoot is on, as Lanzaboote replaces it.
         })
 

@@ -1,3 +1,4 @@
+# Compositor Registry
 {
   flake.modules.nixos.desktop =
     {

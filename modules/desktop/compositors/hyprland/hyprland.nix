@@ -56,16 +56,11 @@
       config = lib.mkIf osConfig.${namespace}.desktop.compositors.hyprland.enable {
         home.packages = with pkgs; [
           pwvucontrol
-          grimblast
-          libnotify
           nwg-displays
+          libnotify
         ];
 
-        programs = {
-          satty.enable = true; # Screenshot Annotator
-        };
-
-        # Empty NWG-Displays Config to avoid Hyprland errors on source
+        # Seed Empty NWG-Displays Config to avoid errors.
         systemd.user.tmpfiles.rules = [
           "f ${config.home.homeDirectory}/.config/hypr/monitors.conf 0644 ${config.home.username} users -"
           "f ${config.home.homeDirectory}/.config/hypr/workspaces.conf 0644 ${config.home.username} users -"
@@ -74,6 +69,8 @@
         wayland.windowManager.hyprland = {
           enable = true;
           configType = "hyprlang";
+
+          # UWSM-Managed. Keep OFF.
           systemd.enable = false;
 
           # Use the host portal and package configuration.
@@ -81,10 +78,12 @@
           package = null;
           portalPackage = null;
 
+          # Import the settings
           settings = import ./_settings.nix {
             inherit config lib pkgs;
           };
 
+          # QOL ExtraConfig
           extraConfig = ''
             windowrule {
                 name = suppress-maximize-events

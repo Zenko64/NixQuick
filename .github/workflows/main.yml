@@ -17,7 +17,6 @@ jobs:
           rm -rf ./README.md ./LICENSE ./.github ./assets
           nix build .#iso
           echo "TAG_NAME=$(basename $(readlink -f result/) | cut -c 1-6)" >> $GITHUB_ENV
-          
 
       #- uses: actions/upload-artifact@v7
       #  with:
