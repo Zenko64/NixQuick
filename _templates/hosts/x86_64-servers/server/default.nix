@@ -8,6 +8,8 @@
     ./programs.nix
   ];
 
+  local.boot.loader.systemd-boot.enable = true;
+
   # Network Configuration (NixOS Wiki)
   networking = {
     useDHCP = false;

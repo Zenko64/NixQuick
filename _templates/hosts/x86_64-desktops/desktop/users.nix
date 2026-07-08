@@ -3,8 +3,8 @@
 {
   users.users.user = {
     isNormalUser = true;
-    home = "/home/user";
     createHome = true;
+    home = "/home/user";
     initialPassword = "password"; # Initial password. Change immediately after the first login.
     extraGroups = [ "wheel" "networkmanager" "render" "input" "video" "audio" ]; # Add all your needed user groups, check Arch Wiki for a list of groups and their purpose.
     shell = pkgs.fish;
