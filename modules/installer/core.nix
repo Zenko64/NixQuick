@@ -32,9 +32,11 @@
       services.getty.autologinUser = lib.mkDefault "nixos";
       services.openssh = {
         enable = true;
+        openFirewall = true;
         settings = {
-          PermitEmptyPasswords = true;
           PermitRootLogin = "yes";
+          PasswordAuthentication = true;
+          KbdInteractiveAuthentication = true;
         };
       };
       users = {
@@ -52,6 +54,8 @@
         users = {
           nixos = {
             isNormalUser = true;
+            createHome = true;
+            home = "/home/nixos";
             description = "NixOS Installer User";
             extraGroups = [ "wheel" ];
             password = "nixquick";
