@@ -65,6 +65,11 @@
           "f ${config.home.homeDirectory}/.config/hypr/workspaces.conf 0644 ${config.home.username} users -"
         ];
 
+        home.pointerCursor = {
+          enable = true;
+          hyprcursor.enable = true;
+        };
+
         wayland.windowManager.hyprland = {
           enable = true;
           configType = "hyprlang";
